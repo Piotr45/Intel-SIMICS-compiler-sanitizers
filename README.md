@@ -27,14 +27,21 @@ Give examples
 #### Riscv-gnu-toolchain
 
 1. Get riscv-gnu-tollchain [GitHub](https://github.com/riscv-collab/riscv-gnu-toolchain).
-2. Follow build instructions for ELF/Newlib toolchain.
-3. Recompile snake game example located in risc-v-baremetal/images/src (you may remove build options for 32bit binaries).
-4. Move built binary to the source directory.
-5. Launch risc-v-baremetal example again to confirm correct toolchain configuration.
-6. Try to add some code to e.g. snake.c file that uses functions from libc, e.g. malloc().
-7. Test if building the game  works.
+2. Configure the toolchain build options.
+```
+./configure --prefix=/opt/riscv --with-cmodel=medany --with-arch=rv64gc --with-abi=lp64
+```
+3. Build the toolchain.
+```
+make -j $(nproc)
+```
+4. Recompile snake game example located in `risc-v-baremetal/images/src` (you may remove build options for 32bit binaries).
+5. Move built binary to the source directory.
+6. Launch risc-v-baremetal example again to confirm correct toolchain configuration.
+7. Try to add some code to e.g. snake.c file that uses functions from libc, e.g. `malloc()`.
+8. Test if building the game  works.
 
-Remember to add /opt/riscv/bin to the PATH variable and to set CROSS_PREFIX (used in Makefile) to 'riscv-unknown-elf-'.
+Remember to add `/opt/riscv/bin` to the PATH variable and to set CROSS_PREFIX (used in Makefile) to 'riscv-unknown-elf-'.
 
 
 ## Running the tests
