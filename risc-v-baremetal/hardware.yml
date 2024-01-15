@@ -1,0 +1,136 @@
+%YAML 1.2
+---
+description: RISC-V simple board hardware setup file
+params:
+  name:
+    type: str
+    description: Name of the machine. Used for the top level component.
+  memory_megs:
+    type: int
+    default: 2048
+    description: Amount of RAM in the machine, in MiB.
+  processor:
+    class:
+      type: str
+      default: riscv-rv64
+      description: Simics class used for primary cores.
+    num_cores:
+      type: int
+      default: 4
+      description: Number of primary cores.
+    freq_mhz:
+      type: int
+      default: 2000
+      description: Processor frequency in MHz.
+    cpi:
+      type: int
+      default: 1
+      advanced: 3
+      description: | 
+        Clock cycles per executed instruction for the processors.
+        Must be a power of 2.
+    timebase_freq_mhz:
+      type: float
+      default: 1.0
+      description: mTime frequency in MHz.
+  riscv_aia:
+    advanced: 3
+    enable:
+      type: bool
+      default: false
+      description: Setup hardware in RISC-V Advanced Interrupt Architecture mode
+
+  consoles:
+    advanced: 2
+    con0:
+      create:
+        type: bool
+        default: true
+        description: Create a console.
+      show:
+        type: bool
+        default: true
+        description: |
+          Automatically display the text console on the first serial port.
+      fg_color:
+        type: str
+        default: white
+        description: "The foreground color, or RGB in #12ab89 format."
+      bg_color:
+        type: str
+        default: black
+        description: "The background color, or RGB in #12ab89 format."
+
+  storage:
+    disk0:
+      image:
+        type: file
+        required: false
+        description: |
+          Disk image file for the machine_name.disk0 virtual
+          disk. Files in craff (Simics own file format), VHDX, and raw formats
+          are supported.
+      size:
+        type: int
+        default: 0x10000000000
+        description: disk0 image size.
+    disk1:
+      image:
+        type: file
+        required: false
+        description: |
+          Disk image file for the machine_name.disk1 virtual
+          disk. Files in craff (Simics own file format), VHDX, and raw formats
+          are supported.
+      size:
+        type: int
+        default: 0x10000000000
+        description: disk1 image size.
+    disk2:
+      image:
+        type: file
+        required: false
+        description: |
+          Disk image file for the machine_name.disk2 virtual
+          disk. Files in craff (Simics own file format), VHDX, and raw formats
+          are supported.
+      size:
+        type: int
+        default: 0x10000000000
+        description: disk2 image size.
+  nic:
+    mac_address:
+      advanced: 2
+      type: str
+      default: auto
+      description: |
+        MAC address of the Ethernet adapter.
+        The format is "XX:XX:XX:XX:XX:XX". Can also be set to "auto" to obtain an
+        auto-generated MAC address.
+  entropy:
+    seed:
+      type: int
+      default: 0x1234
+      description: Seed board.mb.nb.pci_bus.port.mem.map used for entropy device.
+
+  output:
+    system:
+      type: str
+      output: true
+      description: The system top-level component object. (output parameter)
+    console:
+      type: str
+      output: true
+      description: The serial console of the created system. (output parameter)
+    mac_address:
+      type: str
+      output: true
+      description: The MAC address assigned to the NIC.
+    eth_slot:
+      type: str
+      output: true
+      description: Board ethernet connector.
+
+code-type: simics
+script: "%script%/hardware.yml.include"
+...

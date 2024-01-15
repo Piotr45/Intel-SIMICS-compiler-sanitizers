@@ -1,0 +1,33 @@
+%YAML 1.2
+---
+description: RISC-V Simple board running bare metal application.
+params:
+  machine:
+    system_info:
+      type: str
+      description: A short string describing what this system is.
+      default: RISC-V Simple Platform - Bare metal
+    hardware:
+      import: "%script%/hardware.yml"
+      defaults:
+        name: board
+        processor:
+          num_cores: 1
+          freq_mhz: 100
+        memory_megs: 1
+        storage:
+          disk0:
+            size: 0
+          disk1:
+            size: 0
+          disk2:
+            size: 0
+    software:
+      bare_metal:
+        image:
+          type: file
+          default: "%script%/images/snake64.elf"
+          description: Bare metal application.
+
+script: "%script%/bare-metal.target.yml.include"
+...

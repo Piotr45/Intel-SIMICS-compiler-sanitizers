@@ -1,0 +1,60 @@
+load-module risc-v-simple-comp
+
+local $mac = (params.get nic:mac_address)
+if ($mac == auto) {
+    $mac = (get-auto-mac-address)
+}
+
+params.setdefault output:mac_address $mac
+
+if (params.get riscv_aia:enable) {
+    load-module risc-v-aia-comp
+    $system = (create-risc-v-aia-comp name = (params.get name)
+                                        num_cores = (params.get processor:num_cores)
+                                        core_class = (params.get processor:class)
+                                        freq_mhz = (params.get processor:freq_mhz)
+                                        timebase_freq_mhz = (params.get processor:timebase_freq_mhz)
+                                        memory_megs = (params.get memory_megs)
+                                        mac_address = $mac
+                                        disk0_image = (params.get storage:disk0:image) or ""
+                                        disk0_size = (params.get storage:disk0:size)
+                                        disk1_image = (params.get storage:disk1:image) or ""
+                                        disk1_size = (params.get storage:disk1:size)
+                                        disk2_image = (params.get storage:disk2:image) or ""
+                                        disk2_size = (params.get storage:disk2:size)
+                                        entropy_seed = (params.get entropy:seed))
+} else {
+    $system = (create-risc-v-simple-comp name = (params.get name)
+                                        num_cores = (params.get processor:num_cores)
+                                        core_class = (params.get processor:class)
+                                        freq_mhz = (params.get processor:freq_mhz)
+                                        timebase_freq_mhz = (params.get processor:timebase_freq_mhz)
+                                        memory_megs = (params.get memory_megs)
+                                        mac_address = $mac
+                                        disk0_image = (params.get storage:disk0:image) or ""
+                                        disk0_size = (params.get storage:disk0:size)
+                                        disk1_image = (params.get storage:disk1:image) or ""
+                                        disk1_size = (params.get storage:disk1:size)
+                                        disk2_image = (params.get storage:disk2:image) or ""
+                                        disk2_size = (params.get storage:disk2:size)
+                                        entropy_seed = (params.get entropy:seed))
+}
+
+@for hart in SIM_get_object(simenv.system).iface.component.get_slot_value('hart'):
+  hart.step_rate = [1, params['processor:cpi'], 0]
+
+## Set output parameter
+params.setdefault output:system $system
+params.setdefault output:eth_slot $system.eth
+
+## Create serial console
+if (params.get consoles:con0:create) {
+        load-module console-components
+        $console = (create-txt-console-comp $system.console 
+                                    visible  = (params.get consoles:con0:show)
+                                    bg_color = (params.get consoles:con0:bg_color)
+                                    fg_color = (params.get consoles:con0:fg_color))
+        ## Set output parameter
+        params.setdefault output:console $console
+        connect $system.serial0 $console.serial
+}

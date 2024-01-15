@@ -1,0 +1,21 @@
+if sim->build_id < 6184 {
+    interrupt-script -error (
+            "*** The riscv package requires Simics-Base"
+            + " version 6.0.154 or newer.")
+}
+
+## Create hardware
+run-script "%script%/hardware.yml" namespace = machine:hardware
+## Pick up the name of the hardware created
+local $system = (params.get machine:hardware:output:system)
+
+instantiate-components $system
+
+## Load the Application
+local $image = (params.get machine:software:bare_metal:image)
+local $entry = ($system.hart[0].load-binary $image)
+foreach $cpu in ($system->cpu_list) {
+        $cpu.set-pc $entry
+}
+
+enable-real-time-mode
