@@ -13,7 +13,7 @@
 
 CC=$(CROSS_PREFIX)gcc
 
-CFLAGS=-v -Og -Wall -std=c99 -g -mcmodel=medany -static -nostartfiles
+CFLAGS=-v -Og -Wall -std=c99 -g -mcmodel=medany -static
 LFLAGS=-Tlink.ld
 
 all: snake64.elf
