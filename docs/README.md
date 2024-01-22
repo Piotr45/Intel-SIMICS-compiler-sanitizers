@@ -12,6 +12,8 @@ The following report describes the progress that was made during the implementat
 
 Some additional information that could help to continue the project is also included.
 
+[Futher works](#further-works)
+
 ## Riscv-gnu-toolchain
 
 The [RISC-V GNU Toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain) is a set of programming tools and utilities designed to support the RISC-V instruction set architecture. This toolchain includes a cross-compiler, which means it can generate executable code for RISC-V architectures on a host system with a different architecture. This allows us to build software for RISC-V based systems without the need for specialized hardware. It also supports bare-metal applications, which run directly on the hardware without an underlying operating system.
@@ -85,3 +87,11 @@ Sbrk is a system call that adjusts the program's data space, effectively increas
 Brk is another system call related to memory management. It is used to set the end of the data segment of the calling process to the specified value. By adjusting the program break with brk, the heap could be expanded or contracted, providing the necessary memory for dynamic allocation.
 
 These two system calls use references to bss section (section for uninitialized data) defined in linker script. Further attempts may be made to integrate these calls with linker script.
+
+## Further works
+
+On the basis of studies and experiments carried out, we can draw the following further steps:
+
+* finding out how to get `malloc()` to work in bare-metal environment, following our approach (libc implementation) or finding different ways (e.g. custom `malloc` implementation),
+* implementation of test application that exhibits undefined behaviour - we recommend approach related to memory management,
+* testing the functioning of code sanitizers - either provided with the toolchain or custom made.
