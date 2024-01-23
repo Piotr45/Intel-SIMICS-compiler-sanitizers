@@ -43,7 +43,7 @@ What things you need to install the software and how to install them
 
 #### Riscv-gnu-toolchain
 
-1. Get riscv-gnu-tollchain [GitHub](https://github.com/riscv-collab/riscv-gnu-toolchain).
+1. Get riscv-gnu-toolchain [GitHub](https://github.com/riscv-collab/riscv-gnu-toolchain).
 
 2. Configure the toolchain build options.
 
